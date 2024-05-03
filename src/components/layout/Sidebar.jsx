@@ -1,0 +1,98 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function Sidebar() {
+    return (
+        <div id="left-sidebar" className="sidebar">
+            <div className="navbar-brand">
+                <Link to="/">
+                <span>AI Daily</span>
+                </Link>
+                <button
+                type="button"
+                className="btn-toggle-offcanvas btn btn-sm float-right"
+                >
+                <i className="lnr lnr-menu fa fa-chevron-circle-left" />
+                </button>
+            </div>
+            <div className="sidebar-scroll">
+                <div className="user-account">
+                <div className="user_div">
+                    <img
+                    src="images/user.png"
+                    className="user-photo"
+                    alt="User Profile Picture"
+                    />
+                </div>
+                <div className="dropdown">
+
+                    <span>Welcome,</span>
+                        <a
+                        href="javascript:void(0);"
+                        className="dropdown-toggle user-name"
+                        data-toggle="dropdown"
+                        >
+                            <strong>Louis Pierce</strong>
+                        </a>
+
+                    <ul className="dropdown-menu dropdown-menu-right account vivify flipInY">
+                    <li>
+                        <a href="{{route('pages.profile')}}">
+                        <i className="icon-user" />
+                        My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('email.inbox')}}">
+                        <i className="icon-envelope-open" />
+                        Messages
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">
+                        <i className="icon-settings" />
+                        Settings
+                        </a>
+                    </li>
+                    <li className="divider" />
+                    <li>
+                        <a href="{{route('authentication.login')}}">
+                        <i className="icon-power" />
+                        Logout
+                        </a>
+                    </li>
+                    </ul>
+
+                </div>
+                </div>
+                <nav id="left-sidebar-nav" className="sidebar-nav">
+                <ul id="main-menu" className="metismenu">
+                    <li className="header">Daily Journals</li>
+                    <li className="">
+                        <Link to="/daily" className="has-arrow">
+                            <i className="icon-home" />
+                            <span>My Notes</span>
+                        </Link>
+                        <Link to="/" className="has-arrow">
+                            <i className="icon-home" />
+                            <span>Ai Reports</span>
+                        </Link>
+                        {/*<a href="/new-daily.html" className="has-arrow">
+                            <i className="icon-plus" />
+                            <span>New</span>
+                        </a>
+                    <ul>
+                        <li className="{{ Request::segment(2) === 'index' ? 'active' : null }}">
+                        <a href="{{route('mypage.index')}}">04.04.2024</a>
+                        </li>
+                    </ul>*/}
+                    </li>
+                </ul>
+                </nav>
+            </div>
+            </div>
+
+    );
+}
+
+export default Sidebar;
