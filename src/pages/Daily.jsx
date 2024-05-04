@@ -1,44 +1,69 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import CreateNote from '../components/create-note.jsx';
+import axiosInstance from "../lib/axiosInstance.js";
+import {DAILY_LIST_URL} from "../constants/routeConstants.js";
+import Alert from "../components/alert.jsx";
+import EditNote from "../components/edit-note.jsx";
 
 function Daily() {
     const [notes, setNotes] = useState([]);
-    const [editedNoteId, setEditedNoteId] = useState(null);
-    const [editedNoteContent, setEditedNoteContent] = useState('');
+    const [errors, setErrors] = useState();
+    const [success, setSuccess] = useState();
 
-    const addNote = (content) => {
-        const newNote = {
-            id: notes.length + 1,
-            content: content
-        };
-        setNotes([...notes, newNote]);
-    };
-
-    const editNote = (id, content) => {
-        setEditedNoteId(id);
-        setEditedNoteContent(content);
-    };
-
-    const saveEditedNote = () => {
-        const updatedNotes = notes.map(note => {
-            if (note.id === editedNoteId) {
-                return { ...note, content: editedNoteContent };
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            setErrors(null)
+            try {
+                const response = await axiosInstance.get(DAILY_LIST_URL)
+                if(!response.data.is_error && response.status === 200){
+                    console.log(notes)
+                    setNotes(response.data.data)
+                }
+            }catch (e) {
+                if(e.response?.data.is_error){
+                    setErrors(e.response.data.message)
+                }
             }
-            return note;
-        });
-        setNotes(updatedNotes);
-        setEditedNoteId(null);
-        setEditedNoteContent('');
-    };
+        }
 
-    const deleteNote = (id) => {
-        const updatedNotes = notes.filter(note => note.id !== id);
-        setNotes(updatedNotes);
-    };
+        fetchData()
+    },[])
+
+    const mergeNotes = (data)=>{
+        setNotes([...notes,data])
+    }
+
+    const editNote = (noteId,data)=>{
+        const index = notes.findIndex((note) => note._id === noteId);
+        let newEl = notes[index]
+        newEl.content = data.content
+        const newArr = notes.filter((el)=> el._id !== noteId)
+        newArr.push(newEl)
+        setNotes(newArr)
+    }
+
+    const handleRemove = async (e)=>{
+        const noteId =e.currentTarget.getAttribute('data-id');
+        try {
+            /*TODO: fix naming of url*/
+            const response = await axiosInstance.delete(`${DAILY_LIST_URL}${noteId}`)
+            if(!response.data.is_error && response.status === 200){
+                setSuccess("Removed successfully.")
+                setNotes(notes.filter((note)=> note._id !== noteId))
+            }
+        }catch (e) {
+            if(e.response?.data.is_error){
+                setErrors(e.response.data.message)
+            }
+        }
+    }
+
 
     return (
         <div style={{ margin: "15px 15px 50px" }}>
-            <CreateNote addNote={addNote} />
+            {success?.length > 0 && (<Alert messages={success} type={"success"} />)}
+            {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
+            <CreateNote mergeNotes={mergeNotes} />
 
             {notes.length === 0 ? (
                 <p>No notes available. Create a new note to get started!</p>
@@ -48,27 +73,13 @@ function Daily() {
                     <ul className="list-group">
                         {notes.map(note => (
                             <li className="list-group-item d-flex justify-content-between align-items-center" key={note.id}>
-                                {editedNoteId === note.id ? (
-                                    <textarea
-                                        value={editedNoteContent}
-                                        onChange={(e) => setEditedNoteContent(e.target.value)}
-                                        onBlur={saveEditedNote}
-                                        className='default-textarea'
-                                    />
-                                ) : (
-                                    <span>{note.content}</span>
-                                )}
+                                <span>{note.content}</span>
                                 <div>
-                                    {editedNoteId === note.id ? (
-                                        <button className="btn btn-success btn-sm" onClick={saveEditedNote} style={{marginLeft: 10}}><i className='icon-pencil'></i></button>
-                                    ) : (
-                                        <div style={{display: 'flex'}}>
-                                            <button className="btn btn-info btn-sm" onClick={() => editNote(note.id, note.content)}><i className='icon-pencil'></i></button>
-                                            <button className="btn btn-danger btn-sm" onClick={() => deleteNote(note.id)} style={{marginLeft: 10}}><i className='icon-trash'></i></button>
-                                        </div>
-                                        
-                                    )}
-                                    
+                                    <div style={{display: 'flex'}}>
+                                        <EditNote editNote={editNote} note={note} />
+                                        <button className="btn btn-danger btn-sm" onClick={handleRemove} data-id={note._id}
+                                                style={{marginLeft: 10}}><i className='icon-trash'></i></button>
+                                    </div>
                                 </div>
                             </li>
                         ))}

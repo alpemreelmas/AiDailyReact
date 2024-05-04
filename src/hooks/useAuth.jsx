@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import {redirect, useNavigate} from "react-router-dom";
+import {redirect} from "react-router-dom";
 import { AUTH_KEY} from "../constants/appConstants.js";
 import {saveCredentials} from "../lib/services/authService.js";
 const AuthContext = createContext();
@@ -9,8 +9,9 @@ export const AuthProvider = ({ children }) => {
 
     // call this function when you want to authenticate the user
     const login = async (data) => {
-        saveCredentials(data)
-        redirect("/");
+        await saveCredentials(data)
+        /*TODO use redirect()*/
+        window.location = "/daily"
     };
 
     // call this function to sign out logged in user

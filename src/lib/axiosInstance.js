@@ -1,6 +1,7 @@
 import axios from "axios";
 import {AUTH_KEY} from "../constants/appConstants.js";
 import {controlTokensOfUser} from "./services/authService.js";
+import {redirect} from "react-router-dom";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -24,10 +25,12 @@ axiosInstance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     console.log(error)
-/*    if(error.response.status === 401){
+    if(error.response.status === 401){
         window.localStorage.removeItem(AUTH_KEY)
+        /*TODO : redirect()*/
         window.location = "/login"
-    }*/
+
+    }
     return Promise.reject(error);
 });
 

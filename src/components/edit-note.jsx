@@ -6,29 +6,26 @@ import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
 
-function CreateNote({mergeNotes}) {
+function EditNote({editNote,note}) {
 
     const [showNoteCreateModal, setNoteCreateModal] = useState(false);
-    const [noteCreateInputValue, setNoteCreateInputValue] = useState('');
+    const [localNote, setLocalNote] = useState(note);
     const [errors, setErrors] = useState();
-    const [success, setSuccess] = useState();
 
     const toggleNoteCreateModal = () => {
         setNoteCreateModal(!showNoteCreateModal)
         setErrors(null)
-        setNoteCreateInputValue(null)
     }
 
-    const handleCreateNote = async () => {
+    const handleEdit = async () => {
         setErrors(null)
             try {
-                const validated= await createNoteSchema.parseAsync({content: noteCreateInputValue})
-                const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content})
-                console.log(response.data)
-                if(!response.data.is_error && response.status === 201){
-                    setSuccess("Note created successfully.")
-                    mergeNotes(response.data.data)
+                const validated= await createNoteSchema.parseAsync({content: localNote.content})
+                const response = await axiosInstance.patch(DAILY_CREATE_URL + note._id,{content:validated.content})
+                if(!response.data.is_error && response.status === 200){
+                    setLocalNote();
                     toggleNoteCreateModal();
+                    editNote(note._id,response.data.data)
                 }
             }catch (e) {
                 if(e instanceof ZodError){
@@ -37,21 +34,15 @@ function CreateNote({mergeNotes}) {
                     setErrors(messages)
                 }
                 if(e.response?.data.is_error){
-                    setErrors(Array.isArray(e.response.data.message) ? e.response.data.message : [e.response.data.message])
+                    setErrors(e.response.data.message)
                 }
             }
     }
 
     return (
         <div>
-            {success?.length > 0 && (<Alert messages={success} type={"success"} />)}
-            <button
-                onClick={toggleNoteCreateModal}
-                style={{ marginBottom: 15 }}
-                className="btn btn-success btn-sm"
-            >
-                Create New Note
-            </button>
+            <button className="btn btn-info btn-sm" onClick={toggleNoteCreateModal} data-id={note._id}><i
+                className='icon-pencil'></i></button>
 
             {showNoteCreateModal && (
                 <div
@@ -59,7 +50,7 @@ function CreateNote({mergeNotes}) {
                     tabIndex={-1}
                     role="dialog"
                     aria-labelledby="exampleModalCenterTitle"
-                    style={{ display: "block" }}
+                    style={{display: "block"}}
                     aria-modal="true"
                 >
                     <div className="modal-dialog modal-dialog-centered" role="document">
@@ -67,10 +58,10 @@ function CreateNote({mergeNotes}) {
                             <div className="modal-body">
                                 <div className="d-flex mb-3">
                                     <div>
-                                        <h6 className="mb-0">Create Note</h6>
+                                        <h6 className="mb-0">Edit Note</h6>
                                     </div>
                                 </div>
-                                {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
+                                {errors?.length > 0 && (<Alert messages={errors} type={"danger"}/>)}
                                 <form className="form-auth-small m-t-20">
                                     <div className="form-group">
                                         <label htmlFor="signin-email" className="control-label sr-only">
@@ -80,9 +71,9 @@ function CreateNote({mergeNotes}) {
                                             placeholder='Type Your Note'
                                             className="form-control p-2 text-white"
                                             rows={10}
-                                            onChange={(e) => setNoteCreateInputValue(e.target.value)}
+                                            onChange={(e) => setLocalNote({...note,content: e.target.value})}
                                         >
-                                            {noteCreateInputValue}
+                                            {localNote.content}
                                         </textarea>
                                     </div>
                                 </form>
@@ -90,8 +81,9 @@ function CreateNote({mergeNotes}) {
                                     <button onClick={toggleNoteCreateModal} className="btn btn-default">
                                         Cancel
                                     </button>
-                                    <button onClick={handleCreateNote} className="btn btn-success" style={{ marginLeft: 10 }}>
-                                        Create Note
+                                    <button onClick={handleEdit} className="btn btn-success"
+                                            style={{marginLeft: 10}}>
+                                        Update Note
                                     </button>
                                 </div>
                             </div>
@@ -104,4 +96,4 @@ function CreateNote({mergeNotes}) {
     );
 }
 
-export default CreateNote;
+export default EditNote;
