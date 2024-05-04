@@ -24,12 +24,12 @@ axiosInstance.interceptors.request.use(async function (config) {
 axiosInstance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-    console.log(error)
     if(error.response.status === 401){
        if(!validateRefreshToken()){
            window.localStorage.removeItem(AUTH_KEY)
            window.location= "/login"
        }
+       return
     }
     return Promise.reject(error);
 });
