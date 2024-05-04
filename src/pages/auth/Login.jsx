@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axiosInstance from "../../lib/axiosInstance.js";
 import {ZodError} from "zod";
 import {loginSchema} from "../../schemas/loginSchema.js";
 import Alert from "../../components/alert.jsx";
 import {useAuth} from "../../hooks/useAuth.jsx";
+import {LOGIN_URL} from "../../constants/routeConstants.js";
 
 function Login() {
   const { login } = useAuth()
@@ -18,8 +19,8 @@ function Login() {
     setErrors(null)
     try {
       const validated= await loginSchema.parseAsync({email,password})
-      const response = await axiosInstance.post("/auth/login",validated)
-      if(!response.data.is_error && response.status == 200){
+      const response = await axiosInstance.post(LOGIN_URL,validated)
+      if(!response.data.is_error && response.status === 200){
         login(response.data.data)
       }
     }catch (e) {
@@ -28,7 +29,7 @@ function Login() {
         e.errors.map(obj => messages.push(obj.message))
         setErrors(messages)
       }
-      if(e.response.data.is_error){
+      if(e.response?.data.is_error){
         setErrors(Array.isArray(e.response.data.message) ? e.response.data.message : [e.response.data.message])
       }
     }
@@ -74,12 +75,6 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                 />
-              </div>
-              <div className="form-group clearfix">
-                <label className="fancy-checkbox element-left">
-                  <input type="checkbox" />
-                  <span>Remember me</span>
-                </label>
               </div>
               <button type="submit" className="btn btn-primary btn-round btn-block">
                 LOGIN

@@ -12,7 +12,6 @@ function Register() {
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [errors, setErrors] = useState();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

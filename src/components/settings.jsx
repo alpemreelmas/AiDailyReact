@@ -12,7 +12,6 @@ function Settings() {
 
     return (
         <ModalComponent>
-            <CustomButton onClick={()=>console.log("test")}/>
             <div className="d-flex mb-3">
                 <div>
                     <h6 className="mb-0">Settings</h6>

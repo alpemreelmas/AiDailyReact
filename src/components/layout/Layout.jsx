@@ -5,15 +5,13 @@ import ProtectedRoute from "../protected-route.jsx";
 
 function Layout() {
     return (
-        <ProtectedRoute>
-            <div id="wrapper">
-                <Header/>
-                <Sidebar/>
-                <div id='main-content'>
-                    <Outlet/>
-                </div>
+        <div id="wrapper">
+            <Header/>
+            <Sidebar/>
+            <div id='main-content'>
+                <Outlet/>
             </div>
-        </ProtectedRoute>
+        </div>
     )
 }
 

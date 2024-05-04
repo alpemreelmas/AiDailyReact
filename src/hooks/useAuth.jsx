@@ -1,22 +1,22 @@
 import { createContext, useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { AUTH_KEY} from "../constants.js";
+import {redirect, useNavigate} from "react-router-dom";
+import { AUTH_KEY} from "../constants/appConstants.js";
+import {saveCredentials} from "../lib/services/authService.js";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const user = window.localStorage.getItem(AUTH_KEY) || null
-    const navigate = useNavigate();
 
     // call this function when you want to authenticate the user
     const login = async (data) => {
-        window.localStorage.setItem(AUTH_KEY,JSON.stringify(data))
-        navigate("/");
+        saveCredentials(data)
+        redirect("/");
     };
 
     // call this function to sign out logged in user
     const logout = () => {
         window.localStorage.removeItem(AUTH_KEY)
-        navigate("/login", { replace: true });
+        redirect("/login", { replace: true });
     };
 
     const value = useMemo(
