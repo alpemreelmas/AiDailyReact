@@ -1,11 +1,14 @@
 import {useEffect, useState} from 'react';
 import CreateNote from '../components/create-note.jsx';
 import axiosInstance from "../lib/axiosInstance.js";
-import {DAILY_LIST_URL} from "../constants/routeConstants.js";
+import {DAILY_CREATE_URL, DAILY_LIST_URL} from "../constants/routeConstants.js";
 import Alert from "../components/alert.jsx";
-import EditNote from "../components/edit-note.jsx";
+import {createNoteSchema} from "../schemas/createNoteSchema.js";
+import {ZodError} from "zod";
 
 function Daily() {
+    const [showNoteEditModal, setNoteEditModal] = useState(false);
+    const [editNote, setEditNote] = useState();
     const [notes, setNotes] = useState([]);
     const [errors, setErrors] = useState();
     const [success, setSuccess] = useState();
@@ -27,19 +30,12 @@ function Daily() {
         }
 
         fetchData()
+
     },[])
 
+    console.log("first",notes)
     const mergeNotes = (data)=>{
         setNotes([...notes,data])
-    }
-
-    const editNote = (noteId,data)=>{
-        const index = notes.findIndex((note) => note._id === noteId);
-        let newEl = notes[index]
-        newEl.content = data.content
-        const newArr = notes.filter((el)=> el._id !== noteId)
-        newArr.push(newEl)
-        setNotes(newArr)
     }
 
     const handleRemove = async (e)=>{
@@ -52,6 +48,36 @@ function Daily() {
                 setNotes(notes.filter((note)=> note._id !== noteId))
             }
         }catch (e) {
+            if(e.response?.data.is_error){
+                setErrors(e.response.data.message)
+            }
+        }
+    }
+
+    const toggleNoteEditModal = (e) => {
+        setNoteEditModal(!showNoteEditModal)
+        editNote ? setEditNote() : setEditNote(notes.find((el)=> el._id === e.currentTarget.getAttribute('data-id')))
+    }
+
+    const handleEdit = async () => {
+        setErrors(null)
+        try {
+            const validated= await createNoteSchema.parseAsync({content: editNote.content})
+            const response = await axiosInstance.patch(DAILY_CREATE_URL + editNote._id,{content:validated.content})
+            if(!response.data.is_error && response.status === 200){
+                toggleNoteEditModal();
+                setEditNote({...editNote,content:validated.content})
+                const newArr = notes.filter((el)=> el._id !== editNote._id)
+                newArr.push(editNote)
+                setNotes(newArr)
+            }
+            console.log("asdas",notes)
+        }catch (e) {
+            if(e instanceof ZodError){
+                var messages = [];
+                e.errors.map(obj => messages.push(obj.message))
+                setErrors(messages)
+            }
             if(e.response?.data.is_error){
                 setErrors(e.response.data.message)
             }
@@ -76,8 +102,11 @@ function Daily() {
                                 <span>{note.content}</span>
                                 <div>
                                     <div style={{display: 'flex'}}>
-                                        <EditNote editNote={editNote} note={note} />
-                                        <button className="btn btn-danger btn-sm" onClick={handleRemove} data-id={note._id}
+                                        <button className="btn btn-info btn-sm" onClick={toggleNoteEditModal}
+                                                data-id={note._id}><i
+                                            className='icon-pencil'></i></button>
+                                        <button className="btn btn-danger btn-sm" onClick={handleRemove}
+                                                data-id={note._id}
                                                 style={{marginLeft: 10}}><i className='icon-trash'></i></button>
                                     </div>
                                 </div>
@@ -86,7 +115,55 @@ function Daily() {
                     </ul>
                 </>
             )}
+            {showNoteEditModal && (
+                <div
+                    className="modal fade default-modal show"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-labelledby="exampleModalCenterTitle"
+                    style={{display: "block"}}
+                    aria-modal="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-body">
+                                <div className="d-flex mb-3">
+                                    <div>
+                                        <h6 className="mb-0">Edit Note</h6>
+                                    </div>
+                                </div>
+                                {errors?.length > 0 && (<Alert messages={errors} type={"danger"}/>)}
+                                <form className="form-auth-small m-t-20">
+                                    <div className="form-group">
+                                        <label htmlFor="signin-email" className="control-label sr-only">
+                                            Note
+                                        </label>
+                                        <textarea
+                                            placeholder='Type Your Note'
+                                            className="form-control p-2 text-white"
+                                            rows={10}
+                                            onChange={(e) => setEditNote({...editNote,content: e.target.value})}
+                                        >
+                                                {editNote.content}
+                                            </textarea>
+                                    </div>
+                                </form>
+                                <div className="align-right">
+                                    <button onClick={toggleNoteEditModal} className="btn btn-default">
+                                        Cancel
+                                    </button>
+                                    <button onClick={handleEdit} className="btn btn-success"
+                                            style={{marginLeft: 10}}>
+                                        Update Note
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 }
 
