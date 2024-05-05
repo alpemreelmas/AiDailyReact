@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import axiosInstance from "../lib/axiosInstance.js";
-import {DAILY_CREATE_URL, LOGIN_URL} from "../constants/routeConstants.js";
-import {loginSchema} from "../schemas/loginSchema.js";
+import {DAILY_CREATE_URL} from "../constants/routeConstants.js";
 import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
 
-function CreateNote({mergeNotes}) {
+function CreateNote({mergeNotes,noteCount}) {
 
     const [showNoteCreateModal, setNoteCreateModal] = useState(false);
     const [noteCreateInputValue, setNoteCreateInputValue] = useState('');
@@ -48,7 +47,7 @@ function CreateNote({mergeNotes}) {
             <button
                 onClick={toggleNoteCreateModal}
                 style={{ marginBottom: 15 }}
-                className="btn-sm createNoteBtn"
+                className={`btn-sm createNoteBtn ${noteCount > 0 ? `absolute right-10` : ``}`}
             >
                 <i className='icon-plus'></i>
             </button>

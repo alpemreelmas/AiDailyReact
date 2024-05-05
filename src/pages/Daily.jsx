@@ -97,7 +97,7 @@ function Daily() {
                 <div className='noNotes'><img className='sadLogo' src={SadSvg} alt="" /><p>Create a new note to keep your notes organized power of AI</p><CreateNote mergeNotes={mergeNotes} /></div>
             ) : (
                 <>
-                <CreateNote mergeNotes={mergeNotes} />
+                <CreateNote mergeNotes={mergeNotes} noteCount={notes.length}/>
                     <ul className="list-group">
                         {notes.map(note => (
                             <li className="list-group-item d-flex justify-content-between align-items-center" key={note.id}>
