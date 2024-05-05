@@ -48,9 +48,9 @@ function CreateNote({mergeNotes}) {
             <button
                 onClick={toggleNoteCreateModal}
                 style={{ marginBottom: 15 }}
-                className="btn btn-success btn-sm"
+                className="btn-sm createNoteBtn"
             >
-                Create New Note
+                <i className='icon-plus'></i>
             </button>
 
             {showNoteCreateModal && (

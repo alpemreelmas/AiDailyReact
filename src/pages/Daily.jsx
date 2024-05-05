@@ -5,6 +5,7 @@ import {DAILY_CREATE_URL, DAILY_LIST_URL} from "../constants/routeConstants.js";
 import Alert from "../components/alert.jsx";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import {ZodError} from "zod";
+import SadSvg from "../../public/sad.svg";
 
 function Daily() {
     const [showNoteEditModal, setNoteEditModal] = useState(false);
@@ -90,13 +91,13 @@ function Daily() {
         <div style={{ margin: "15px 15px 50px" }}>
             {success?.length > 0 && (<Alert messages={success} type={"success"} />)}
             {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
-            <CreateNote mergeNotes={mergeNotes} />
 
             {notes.length === 0 ? (
-                <p>No notes available. Create a new note to get started!</p>
+                
+                <div className='noNotes'><img className='sadLogo' src={SadSvg} alt="" /><p>Create a new note to keep your notes organized power of AI</p><CreateNote mergeNotes={mergeNotes} /></div>
             ) : (
                 <>
-                    <h6>05.04.2024</h6>
+                <CreateNote mergeNotes={mergeNotes} />
                     <ul className="list-group">
                         {notes.map(note => (
                             <li className="list-group-item d-flex justify-content-between align-items-center" key={note.id}>
