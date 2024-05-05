@@ -33,10 +33,13 @@ export async function validateRefreshToken(){
         const refreshToken = jwtDecode(authDecoded.refresh_token)
         if (Date.now().valueOf() < new Date(refreshToken.exp * 1000).valueOf()) {
             try {
+                console.log("sıçtıı")
                 const response = await axiosInstance.post(REFRESH_TOKEN_URL, {refreshToken: authDecoded.refresh_token})
                 if (!response.data.is_error) {
+                    
                     return {auth:true, credentials: await saveCredentials(response.data.data)}
                 }
+                console.log(response.data)
             } catch (e) {
                 console.log("axios interceptor err: ", e)
             }
