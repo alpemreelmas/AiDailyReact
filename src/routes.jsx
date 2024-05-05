@@ -40,8 +40,8 @@ import ProtectedRoute from "./components/protected-route.jsx";
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
-            <Route element={<Layout/>} >
-                <Route element={<ProtectedRoute/>}>
+            <Route element={<ProtectedRoute/>} >
+                <Route element={<Layout/>}>
                     <Route path="" element={<HomePage />} />
                     <Route path="daily" element={<Daily />} />
                 </Route>

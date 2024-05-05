@@ -1,7 +1,6 @@
 import axios from "axios";
+import {controlTokensOfUser, getCredentials, validateRefreshToken} from "./services/authService.js";
 import {AUTH_KEY} from "../constants/appConstants.js";
-import {controlTokensOfUser, validateRefreshToken} from "./services/authService.js";
-import {redirect} from "react-router-dom";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -14,7 +13,7 @@ const axiosInstance = axios.create({
 
 
 axiosInstance.interceptors.request.use(async function (config) {
-    const credentials = await controlTokensOfUser()
+    const credentials = await getCredentials()
     config.headers.Authorization = `Bearer ${credentials?.access_token}`;
     return config;
 }, function (error) {
@@ -29,7 +28,6 @@ axiosInstance.interceptors.response.use(function (response) {
            window.localStorage.removeItem(AUTH_KEY)
            window.location= "/login"
        }
-       return
     }
     return Promise.reject(error);
 });

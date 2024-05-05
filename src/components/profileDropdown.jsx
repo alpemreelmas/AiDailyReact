@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 export function ProfileDropdown() {
     const [showProfileDropdown, setProfileDropdown] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const modalRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef(null);
+    const modalRef = useRef(null);
 
 
 
@@ -12,7 +12,7 @@ export function ProfileDropdown() {
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
 
-    const handleSubmit = (e:any) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
       };
 
@@ -28,11 +28,11 @@ export function ProfileDropdown() {
     }
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setProfileDropdown(false);
             }
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
                 setShowModal(false);
             }
         }

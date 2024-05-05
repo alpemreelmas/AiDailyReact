@@ -14,26 +14,27 @@ function Daily() {
     const [success, setSuccess] = useState();
 
     useEffect(()=>{
+        console.log("daily use efec")
         const fetchData = async ()=>{
             setErrors(null)
             try {
                 const response = await axiosInstance.get(DAILY_LIST_URL)
                 if(!response.data.is_error && response.status === 200){
-                    console.log(notes)
                     setNotes(response.data.data)
                 }
             }catch (e) {
                 if(e.response?.data.is_error){
+                    console.log("here where is unauthorized")
                     setErrors(e.response.data.message)
                 }
             }
         }
 
         fetchData()
+        console.log("daily end")
 
     },[])
 
-    console.log("first",notes)
     const mergeNotes = (data)=>{
         setNotes([...notes,data])
     }

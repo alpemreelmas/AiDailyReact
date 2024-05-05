@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import ProfileDropdown from '../profileDropdown';
+import ProfileDropdown from '../profileDropdown.jsx';
 
 function Sidebar() {
     return (
