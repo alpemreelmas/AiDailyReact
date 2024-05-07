@@ -4,6 +4,7 @@ import {DAILY_CREATE_URL} from "../constants/routeConstants.js";
 import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
+import PlusSvg from "../../public/plus.svg";
 
 function CreateNote({mergeNotes,noteCount}) {
 
@@ -44,13 +45,25 @@ function CreateNote({mergeNotes,noteCount}) {
     return (
         <div>
             {success?.length > 0 && (<Alert messages={success} type={"success"} />)}
-            <button
-                onClick={toggleNoteCreateModal}
-                style={{ marginBottom: 15 }}
-                className={`btn-sm createNoteBtn ${noteCount > 0 ? `absolute right-10` : ``}`}
-            >
-                <i className='icon-plus'></i>
-            </button>
+
+
+            {noteCount > 0 ? (
+                <button
+                    onClick={toggleNoteCreateModal}
+                    style={{ marginBottom: 15 }}
+                    className={`btn-sm btn-success createNoteBtnB0 `}
+                >
+                    <img src={PlusSvg} className='createButtonIcon' alt="" />
+                </button>
+            ) : (
+                <button
+                    onClick={toggleNoteCreateModal}
+                    style={{ marginBottom: 15 }}
+                    className={`btn-sm createNoteBtn `}
+                >
+                    <i className='icon-plus'></i>
+                </button>
+            )}
 
             {showNoteCreateModal && (
                 <div

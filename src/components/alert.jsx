@@ -1,5 +1,10 @@
+import { useEffect } from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 function Alert({messages,type}) {
+
+
     return (
         <div className={`alert alert-${type} p-2 my-3 mx-1 text-left`} role="alert">
             <ul className={"m-0"}>

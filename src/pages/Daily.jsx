@@ -94,7 +94,11 @@ function Daily() {
 
             {notes.length === 0 ? (
                 
-                <div className='noNotes'><img className='sadLogo' src={SadSvg} alt="" /><p>Create a new note to keep your notes organized power of AI</p><CreateNote mergeNotes={mergeNotes} /></div>
+                <div className='noNotes'>
+                    <img className='sadLogo' src={SadSvg} alt="" />
+                    <p>Create a new note to keep your notes organized power of AI</p>
+                    <CreateNote mergeNotes={mergeNotes} />
+                </div>
             ) : (
                 <>
                 <CreateNote mergeNotes={mergeNotes} noteCount={notes.length}/>

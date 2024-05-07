@@ -11394,12 +11394,11 @@ hr {
     align-items: center;
     margin-top: 300px;
     font-size: 50px;
-    padding-right: 120px;
     text-align: center;
 }
 
 .noNotes .sadLogo {
-    width: 600px;
+    width: 40%;
     position: absolute;
     z-index: -1;
     opacity: 0.2;
@@ -11436,8 +11435,73 @@ hr {
     border: none;
 }
 
+.createNoteBtnB0 {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: 2px solid #28a745;
+  transition: 100ms all;
+}
+
+.createNoteBtnB0:focus {
+  outline: none;
+}
+
+.createNoteBtnB0 img {
+  width: 20px;
+}
+
+.createNoteBtnB0:hover img {
+  opacity: 0.7;
+  transition: 100ms all;
+}
+
 .settingsButton:focus {
     outline: none !important;
+}
+
+@media screen and (max-width: 1536px) {
+  .noNotes {
+    margin-top: 200px;
+    font-size: 40px;
+  }
+
+  .createNoteBtn i {
+    font-size: 70px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .noNotes {
+    margin-top: 150px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .noNotes {
+    font-size: 30px;
+  }
+
+  .createNoteBtn i {
+    font-size: 60px;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .noNotes .sadLogo {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .noNotes {
+    font-size: 20px;
+  }
+
+  .createNoteBtn i {
+    font-size: 40px;
+  }
 }
 
 @keyframes slideIn {
