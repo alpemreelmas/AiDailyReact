@@ -7,7 +7,7 @@ import Alert from "./alert.jsx";
 import PlusSvg from "../../public/plus.svg";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Button from "./items/buttonElement";
+import Button from "./ui/buttonElement.jsx";
 
 function CreateNote({mergeNotes,noteCount}) {
 

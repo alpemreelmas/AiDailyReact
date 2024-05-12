@@ -5,8 +5,8 @@ import axiosInstance from "../../lib/axiosInstance.js";
 import {ZodError} from "zod";
 import Alert from "../../components/alert.jsx";
 import {registerSchema} from "../../schemas/registerSchema.js";
-import Button from "../../components/items/buttonElement.jsx";
-import InputWithLabel from "../../components/items/inputWithLabel";
+import Button from "../../components/ui/buttonElement.jsx";
+import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
 
 function Register() {
   const [name, setName] = useState('');
@@ -40,7 +40,6 @@ function Register() {
 
   return (
     <div className="auth-main particles_js">
-      {errors?.length > 0 && (<Alert messages={errors} type={"warning"} />)}
       <div className="auth_div vivify popIn">
         <div className="auth_brand">
             AI Daily
@@ -48,6 +47,8 @@ function Register() {
         <div className="card">
           <div className="body">
             <p className="lead">Create an account</p>
+
+            {errors?.length > 0 && (<Alert messages={errors} type={"warning"} />)}
             <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
               <div className="form-group">
                 <InputWithLabel type='text' label='Your name' id='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='Your Name' />
@@ -68,7 +69,7 @@ function Register() {
                 />
                 <InputWithLabel type='password' label='Verify Password' id='password' value={verifyPassword} onChange={(e) => setVerifyPassword(e.target.value)} placeholder='Verify Password' />
               </div>
-              <Button type='submit' kind='prymary btn-round btn-block' content='Register' />
+              <Button type='submit' kind='primary btn-round btn-block' content='Register' />
               <div className="bottom">
                 <span>
                   Do you have an account? <Link to="/login">Login</Link>

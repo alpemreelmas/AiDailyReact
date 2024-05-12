@@ -1,4 +1,4 @@
-import React from 'react';
+import {cn} from "../../lib/utils.js";
 
 const InputWithLabel = ({ className, label, type, id, value, onChange, placeholder }) => {
     return (
@@ -8,7 +8,7 @@ const InputWithLabel = ({ className, label, type, id, value, onChange, placehold
             </label>
             <input
                 type={type}
-                className={"form-control round" + className}
+                className={cn("form-control round",className)}
                 id={id}
                 value={value}
                 onChange={onChange}

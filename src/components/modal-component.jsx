@@ -1,5 +1,5 @@
 import {useState} from "react";
-import Button from "./items/buttonElement";
+import Button from "./ui/buttonElement.jsx";
 
 function ModalComponent({children, CloseButton}){
     const [showModal, setShowModal] = useState(false);

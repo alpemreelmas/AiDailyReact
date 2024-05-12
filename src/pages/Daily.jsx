@@ -8,6 +8,7 @@ import {ZodError} from "zod";
 import SadSvg from "../../public/sad.svg";
 import SortableList, {SortableItem} from "react-easy-sort";
 import {arrayMoveImmutable} from "array-move";
+import {toast} from "react-toastify";
 
 function Daily() {
     const [showNoteEditModal, setNoteEditModal] = useState(false);
@@ -46,7 +47,7 @@ function Daily() {
             /*TODO: fix naming of url*/
             const response = await axiosInstance.delete(`${DAILY_LIST_URL}${noteId}`)
             if (!response.data.is_error && response.status === 200) {
-                setSuccess("Removed successfully.")
+                toast("Removed successfully");
                 setNotes(notes.filter((note) => note._id !== noteId))
             }
         } catch (e) {
@@ -86,7 +87,7 @@ function Daily() {
                 setErrors(messages)
             }
             if (e.response?.data.is_error) {
-                setErrors(e.response.data.message)
+                toast(e.response.data.message)
             }
         }
     }
@@ -98,7 +99,6 @@ function Daily() {
 
     return (
         <div style={{margin: "15px 15px 50px"}}>
-            {success?.length > 0 && (<Alert messages={success} type={"success"}/>)}
             {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
 
             {notes.length === 0 ? (

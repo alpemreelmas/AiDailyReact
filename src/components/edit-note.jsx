@@ -4,7 +4,7 @@ import {DAILY_CREATE_URL} from "../constants/routeConstants.js";
 import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
-import Button from "./items/buttonElement";
+import Button from "./ui/buttonElement.jsx";
 
 function EditNote({editNote,note}) {
 

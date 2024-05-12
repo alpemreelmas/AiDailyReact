@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { updateProfileSchema } from "../schemas/updateProfileSchema";
 import axiosInstance from "../lib/axiosInstance";
 import { ZodError } from "zod";
-import Button from "./items/buttonElement";
-import InputWithLabel from "./items/inputWithLabel";
+import Button from "./ui/buttonElement.jsx";
+import InputWithLabel from "./ui/inputWithLabel.jsx";
 
 export function ProfileDropdown() {
     const [showProfileDropdown, setProfileDropdown] = useState(false);
