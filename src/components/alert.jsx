@@ -1,17 +1,21 @@
-import 'react-toastify/dist/ReactToastify.css'
+import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function Alert({messages,type}) {
+function Alert({ messages, type }) {
+    useEffect(() => {
+        
+        if (Array.isArray(messages)) {
+            messages.forEach(message => {
+                toast[type](message);
+            });
+        } else {
+            
+            toast[type](messages);
+        }
+    }, [messages]);
 
-
-    return (
-        <div className={`alert alert-${type} p-2 my-3 mx-1 text-left`} role="alert">
-            <ul className={"m-0"}>
-                {Array.isArray(messages) ? messages.map((err, index) => (
-                    <li key={index}>{err}</li>
-                )): messages}
-            </ul>
-        </div>
-    );
+    return <ToastContainer /> ;
 }
 
 export default Alert;

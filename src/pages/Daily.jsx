@@ -99,7 +99,7 @@ function Daily() {
     return (
         <div style={{margin: "15px 15px 50px"}}>
             {success?.length > 0 && (<Alert messages={success} type={"success"}/>)}
-            {errors?.length > 0 && (<Alert messages={errors} type={"danger"}/>)}
+            {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
 
             {notes.length === 0 ? (
 
@@ -152,7 +152,7 @@ function Daily() {
                                             <h6 className="mb-0">Edit Note</h6>
                                         </div>
                                     </div>
-                                    {errors?.length > 0 && (<Alert messages={errors} type={"danger"}/>)}
+                                    {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
                                     <form className="form-auth-small m-t-20">
                                         <div className="form-group">
                                             <label htmlFor="signin-email" className="control-label sr-only">

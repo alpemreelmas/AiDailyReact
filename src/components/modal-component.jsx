@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Button from "./items/buttonElement";
 
 function ModalComponent({children, CloseButton}){
     const [showModal, setShowModal] = useState(false);
@@ -26,16 +27,12 @@ function ModalComponent({children, CloseButton}){
                                 {children}
                                 <div className="align-right">
                                     {!CloseButton ? (
-                                        <button onClick={toggleModal} className="btn btn-default">
-                                            Cancel
-                                        </button>
+                                        <Button kind='default' content='cancel' onClick={toggleModal} />
                                     ) : (
-                                       <CloseButton onClick={toggleModal} />
+                                        <CloseButton onClick={toggleModal} />
                                     )}
 
-                                    <button type='submit' className="btn btn-success" style={{marginLeft: 10}}>
-                                    Confirm
-                                    </button>
+                                    <Button type='submit' kind='success' content='confirm' style={{marginLeft: 10}} />
                                 </div>
                             </div>
                         </div>

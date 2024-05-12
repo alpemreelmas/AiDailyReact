@@ -5,6 +5,9 @@ import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
 import PlusSvg from "../../public/plus.svg";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Button from "./items/buttonElement";
 
 function CreateNote({mergeNotes,noteCount}) {
 
@@ -44,7 +47,13 @@ function CreateNote({mergeNotes,noteCount}) {
 
     return (
         <div>
-            {success?.length > 0 && (<Alert messages={success} type={"success"} />)}
+            {success?.length > 0 && (
+            <>
+                
+                <Alert messages={success} type={"success"} />
+            </>
+
+            )}
 
 
             {noteCount > 0 ? (
@@ -82,7 +91,7 @@ function CreateNote({mergeNotes,noteCount}) {
                                         <h6 className="mb-0">Create Note</h6>
                                     </div>
                                 </div>
-                                {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
+                                {errors?.length > 0 && (<Alert messages={errors} type={"warning"} />)}
                                 <form className="form-auth-small m-t-20">
                                     <div className="form-group">
                                         <label htmlFor="signin-email" className="control-label sr-only">
@@ -99,12 +108,8 @@ function CreateNote({mergeNotes,noteCount}) {
                                     </div>
                                 </form>
                                 <div className="align-right">
-                                    <button onClick={toggleNoteCreateModal} className="btn btn-default">
-                                        Cancel
-                                    </button>
-                                    <button onClick={handleCreateNote} className="btn btn-success" style={{ marginLeft: 10 }}>
-                                        Create Note
-                                    </button>
+                                    <Button kind='default' content='cancel' onClick={toggleNoteCreateModal} />
+                                    <Button kind='success' content='Create Note' onClick={handleCreateNote} style={{marginLeft: 10}} />
                                 </div>
                             </div>
                         </div>

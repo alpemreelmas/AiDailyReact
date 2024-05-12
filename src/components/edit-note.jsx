@@ -4,6 +4,7 @@ import {DAILY_CREATE_URL} from "../constants/routeConstants.js";
 import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
+import Button from "./items/buttonElement";
 
 function EditNote({editNote,note}) {
 
@@ -60,7 +61,7 @@ function EditNote({editNote,note}) {
                                         <h6 className="mb-0">Edit Note</h6>
                                     </div>
                                 </div>
-                                {errors?.length > 0 && (<Alert messages={errors} type={"danger"}/>)}
+                                {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
                                 <form className="form-auth-small m-t-20">
                                     <div className="form-group">
                                         <label htmlFor="signin-email" className="control-label sr-only">
@@ -77,13 +78,8 @@ function EditNote({editNote,note}) {
                                     </div>
                                 </form>
                                 <div className="align-right">
-                                    <button onClick={toggleNoteCreateModal} className="btn btn-default">
-                                        Cancel
-                                    </button>
-                                    <button onClick={handleEdit} className="btn btn-success"
-                                            style={{marginLeft: 10}}>
-                                        Update Note
-                                    </button>
+                                    <Button kind='default' content='cancel' onClick={toggleNoteCreateModal} />
+                                    <Button kind='success' content='Update Note' onClick={handleEdit} style={{marginLeft: 10}} />
                                 </div>
                             </div>
                         </div>

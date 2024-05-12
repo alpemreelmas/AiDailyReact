@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { updateProfileSchema } from "../schemas/updateProfileSchema";
+import axiosInstance from "../lib/axiosInstance";
+import { ZodError } from "zod";
+import Button from "./items/buttonElement";
+import InputWithLabel from "./items/inputWithLabel";
 
 export function ProfileDropdown() {
     const [showProfileDropdown, setProfileDropdown] = useState(false);
@@ -7,14 +12,12 @@ export function ProfileDropdown() {
     const modalRef = useRef(null);
 
 
-
+    const [user, setUser] = useState(null)
     const [email, setEmail] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState();
+    const [name, setName] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-      };
 
 
     const toggleModal = () => {
@@ -43,10 +46,53 @@ export function ProfileDropdown() {
         };
     }, [dropdownRef, modalRef]);
 
+
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const respone = await axiosInstance.get('/auth/profile');
+                setUser(respone.data);
+            }catch(error){
+                console.log(error)
+            }
+        }
+
+        fetchUserData();
+    }, []);
+
+
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrors(null)
+        try {
+            const validated = await updateProfileSchema.parseAsync({name,password})
+            const response = await axiosInstance.post("/auth/profile", validated)
+            if (!response.data.is_error && response.status == 200){
+                const updatedData = response.data.data; // API'den dönen güncellenmiş veriler
+                console.log("Updated data:", updatedData);
+            }
+        }catch (e) {
+            if(e instanceof ZodError) {
+                var messages = [];
+                e.errors.map(obj => messages.push(obj.message))
+                setErrors(messages)
+            }
+            if(e.response.data.is_error){
+                setErrors(Array.isArray(e.response.data.message) ? e.response.data.message : [e.respone.data.message])
+            }
+        }
+      };
+
     return (
         <div ref={dropdownRef}>
             <button className="dropdown-toggle user-name" onClick={toggleProfileDropdown}>
-                <strong>Louis Pierce</strong>
+                <strong>{user ? user.data.name : "User not found"}</strong>
             </button>
             {showProfileDropdown && (
                 <ul className="dropdown-menu dropdown-menu-right account vivify flipInY">
@@ -76,6 +122,7 @@ export function ProfileDropdown() {
                 </ul>
             )}
             {showModal && (
+
                 <div className="modal fade default-modal show" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" style={{ display: "block" }} aria-modal="true">
                     <div ref={modalRef} className="modal-dialog modal-dialog-centered" role="document">
                         <div className="modal-content">
@@ -87,57 +134,22 @@ export function ProfileDropdown() {
                                 </div>
                                 <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
                                     <div className="form-group">
-                                        <label htmlFor="signin-email" className="control-label sr-only">
-                                        Email
-                                        </label>
-                                        <input
-                                        type="email"
-                                        className="form-control round"
-                                        id="signin-email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="New Email"
-                                        />
+                                        <InputWithLabel type='text' label='name' id='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="signin-password" className="control-label sr-only">
-                                        Password
-                                        </label>
-                                        <input
-                                        type="password"
-                                        className="form-control round"
-                                        id="signin-password"
-                                        value={oldPassword}
-                                        onChange={(e) => setOldPassword(e.target.value)}
-                                        placeholder="Old Password"
-                                        />
+                                        <InputWithLabel type='password' label='Password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="signin-password" className="control-label sr-only">
-                                        Password
-                                        </label>
-                                        <input
-                                        type="password"
-                                        className="form-control round"
-                                        id="signin-password"
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        placeholder="New Password"
-                                        />
-                                    </div>
-                                </form>
-                                <div className="align-right">
-                                    <button onClick={toggleModal} className="btn btn-default">
-                                        Cancel
-                                    </button>
-                                    <button type='submit' className="btn btn-success" style={{marginLeft: 10}}>
-                                        Confirm
-                                    </button>
+                                    <div className="align-right">
+                                    <Button kind='default' content='cancel' onClick={toggleModal} />
+                                    <Button type='submit' kind='success' content='confirm' style={{marginLeft: 10}} />
                                 </div>
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             )}
         </div>
     )
