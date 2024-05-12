@@ -2,28 +2,28 @@ import { useState} from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from "../../lib/axiosInstance.js";
 import {ZodError} from "zod";
-import {loginSchema} from "../../schemas/loginSchema.js";
 import Alert from "../../components/alert.jsx";
-import {useAuth} from "../../hooks/useAuth.jsx";
-import {LOGIN_URL} from "../../constants/routeConstants.js";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
+import { forgotPasswordSchema } from '../../schemas/forgotPasswordSchema.js';
+import { toast } from 'react-toastify';
+import BackButton from '../../components/ui/backButton.jsx';
 
 
-function Login() {
-  const { login } = useAuth()
+
+function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors(null)
     try {
-      const validated= await loginSchema.parseAsync({email,password})
-      const response = await axiosInstance.post(LOGIN_URL,validated)
+      const validated= await forgotPasswordSchema.parseAsync({email})
+      const response = await axiosInstance.post('/reset-password',validated)
+      
       if(!response.data.is_error && response.status === 200){
-        login(response.data.data)
+        toast(response.data.data)
       }
     }catch (e) {
       if(e instanceof ZodError){
@@ -48,27 +48,15 @@ function Login() {
         </div>
         <div className="card">
           <div className="body">
-            <p className="lead">Login to your account</p>
+            <BackButton />
+            <p className="lead" style={{marginTop: 30}}>Send reset password email</p>
 
             <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
               {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
               <div className="form-group">
                 <InputWithLabel type='email' label='Email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
               </div>
-              <div className="form-group">
-                <InputWithLabel type='password' label='Password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
-              </div>
-              <div className='forgotPassword' style={{textAlign: 'left'}}>
-                <span><Link to="/forgot-password">I forgot my password</Link></span>
-              </div>
-              
-              <Button type='submit' kind='primary btn-round btn-block' content='Login' />
-
-              <div className="bottom">
-                <span>
-                  Don't have an account? <Link to="/register">Register</Link>
-                </span>
-              </div>
+              <Button type='submit' kind='primary btn-round btn-block' content='Send' />
             </form>
           </div>
         </div>
@@ -77,4 +65,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ForgotPassword;

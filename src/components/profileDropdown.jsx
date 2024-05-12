@@ -4,6 +4,8 @@ import axiosInstance from "../lib/axiosInstance";
 import { ZodError } from "zod";
 import Button from "./ui/buttonElement.jsx";
 import InputWithLabel from "./ui/inputWithLabel.jsx";
+import { toast } from "react-toastify";
+import { AUTH_KEY} from "../constants/appConstants.js";
 
 export function ProfileDropdown() {
     const [showProfileDropdown, setProfileDropdown] = useState(false);
@@ -74,8 +76,9 @@ export function ProfileDropdown() {
             const validated = await updateProfileSchema.parseAsync({name,password})
             const response = await axiosInstance.post("/auth/profile", validated)
             if (!response.data.is_error && response.status == 200){
-                const updatedData = response.data.data; // API'den dönen güncellenmiş veriler
-                console.log("Updated data:", updatedData);
+                toast('Informations updated successfully');
+                toggleModal();
+                toggleProfileDropdown();
             }
         }catch (e) {
             if(e instanceof ZodError) {
@@ -87,7 +90,22 @@ export function ProfileDropdown() {
                 setErrors(Array.isArray(e.response.data.message) ? e.response.data.message : [e.respone.data.message])
             }
         }
-      };
+    };
+
+    const handleResendVerificationEmail = async (e) => {
+        e.preventDefault();
+        setErrors(null)
+        try{
+            const userData = JSON.parse(window.localStorage.getItem(AUTH_KEY));
+            const response = await axiosInstance.post("/auth/profile", {email: userData.email})
+            if (!response.data.is_error && response.status == 200){
+                toast('Verification email successfully sended');
+            }
+
+        }catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div ref={dropdownRef}>
@@ -139,11 +157,22 @@ export function ProfileDropdown() {
                                     <div className="form-group">
                                         <InputWithLabel type='password' label='Password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                                     </div>
+                                    
                                     <div className="align-right">
-                                    <Button kind='default' content='cancel' onClick={toggleModal} />
-                                    <Button type='submit' kind='success' content='confirm' style={{marginLeft: 10}} />
-                                </div>
+                                    {user.data.verificationToken !== null && (
+                                        <Button
+                                            type='submit'
+                                            kind='success'
+                                            content='Resend verification email'
+                                            onClick={handleResendVerificationEmail}
+                                        />
+                                    )}
+
+                                        <Button kind='default' content='cancel' onClick={toggleModal} />
+                                        <Button type='submit' kind='success' content='confirm' style={{marginLeft: 10}} />
+                                    </div>
                                 </form>
+                                
 
                             </div>
                         </div>

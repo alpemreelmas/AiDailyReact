@@ -5,7 +5,6 @@ import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
 import PlusSvg from "../../public/plus.svg";
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "./ui/buttonElement.jsx";
 

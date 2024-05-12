@@ -60,13 +60,6 @@ function Register() {
                 <InputWithLabel type='password' label='Password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
               </div>
               <div className="form-group">
-                <input
-                    type="password"
-                    className="form-control round"
-                    placeholder="Verify Password"
-                    value={verifyPassword}
-                    onChange={(e) => setVerifyPassword(e.target.value)}
-                />
                 <InputWithLabel type='password' label='Verify Password' id='password' value={verifyPassword} onChange={(e) => setVerifyPassword(e.target.value)} placeholder='Verify Password' />
               </div>
               <Button type='submit' kind='primary btn-round btn-block' content='Register' />

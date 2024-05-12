@@ -2842,8 +2842,7 @@ html.fullscreen-bg #wrapper {
   padding: 15px;
   width: 100%;
   top: 50px !important;
-  right: 0;
-  left: auto !important;
+  left: 0;
 }
 .user-account .dropdown .dropdown-menu li.divider {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -11456,6 +11455,64 @@ hr {
   transition: 100ms all;
 }
 
+.goBackButton {
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #a5a8ad;
+  padding: 0;
+}
+
+.goBackButton:focus {
+  outline: none;
+}
+
+.goBackButton p {
+  margin-bottom: 0;
+}
+
+.closeSidebarButton {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #a5a8ad;
+  padding: 0;
+}
+
+.closeSidebarButton p {
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.openSidebarButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 8;
+  width: 50px;
+  height: 50px;
+  background: none;
+  border: none;
+  font-size: 25px;
+  color: #a5a8ad;
+}
+
+.sidebar.open {
+  left: 0 !important;
+}
+
+
+
 .settingsButton:focus {
     outline: none !important;
 }
@@ -11475,6 +11532,25 @@ hr {
   .noNotes {
     margin-top: 150px;
   }
+}
+
+@media screen and (max-width: 1200px) {
+  .headerTitle {
+    margin-left: 30px;
+    margin-bottom: 4px;
+    padding-left: 10px;
+    border-left: #a5a8ad 1px solid;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .openSidebarButton {
+    display: none;
+  }
+  .closeSidebarButton {
+    display: none;
+  }
+
 }
 
 @media screen and (max-width: 1024px) {

@@ -1,8 +1,8 @@
-import {cn} from "../../lib/utils.js";
+import React from 'react';
 
-const Button = ({kind, content, className, props}) => {
+const Button = ({kind, content, onClick}) => {
     return (
-        <button className={cn("btn btn-" + kind,className)} {...props}>
+        <button className={"btn btn-" + kind} onClick={onClick}>
             {content}
         </button>
     );

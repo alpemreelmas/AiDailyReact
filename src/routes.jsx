@@ -4,6 +4,7 @@ import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
 import Daily from "./pages/Daily.jsx";
 import Layout from "./components/layout/Layout.jsx";
+import ForgotPassword from "./pages/auth/ForgotPassword.jsx"
 import {createBrowserRouter, createRoutesFromElements, Route, useRoutes} from "react-router-dom";
 import ProtectedRoute from "./components/protected-route.jsx";
 /*export const ROUTES = [
@@ -49,6 +50,7 @@ export const router = createBrowserRouter(
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="*" element={<h1>Page not found</h1>} />
         </Route>
 

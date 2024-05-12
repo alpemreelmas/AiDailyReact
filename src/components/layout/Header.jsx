@@ -1,9 +1,16 @@
+import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
 import Settings from '../settings.jsx';
 
 function Header() {
 
     const location = useLocation();
+
+    const [SidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+      setSidebarOpen(!SidebarOpen);
+    };
 
     let title;
     switch (location.pathname) {
@@ -16,6 +23,8 @@ function Header() {
     }
 
     return (
+        <>
+        
         <nav className="navbar top-navbar">
             <div className="container-fluid">
                 <div
@@ -27,12 +36,7 @@ function Header() {
                     alignItems: "center"
                 }}
                 >
-                <div className="navbar-btn">
-                    <button type="button" className="btn-toggle-offcanvas">
-                    <i className="lnr lnr-menu fa fa-bars" />
-                    </button>
-                </div>
-                <h4 style={{ margin: "0 !important" }}>{title}</h4>
+                <h4 className="headerTitle">{title}</h4>
                 </div>
                 <div className="navbar-right">
                 <div id="navbar-menu">
@@ -62,6 +66,7 @@ function Header() {
                 <div className="progress-bar" id="myBar" />
             </div>
         </nav>
+        </>
     );
 }
 
