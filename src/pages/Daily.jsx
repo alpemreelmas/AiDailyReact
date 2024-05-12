@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import CreateNote from '../components/create-note.jsx';
 import axiosInstance from "../lib/axiosInstance.js";
-import {DAILY_CREATE_URL, DAILY_LIST_URL} from "../constants/routeConstants.js";
+import {DAILY_CREATE_URL, DAILY_LIST_URL, DAILY_ORDER_URL} from "../constants/routeConstants.js";
 import Alert from "../components/alert.jsx";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import {ZodError} from "zod";
@@ -15,7 +15,6 @@ function Daily() {
     const [editNote, setEditNote] = useState();
     const [notes, setNotes] = useState([]);
     const [errors, setErrors] = useState();
-    const [success, setSuccess] = useState();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,7 +32,6 @@ function Daily() {
         }
 
         fetchData()
-        console.log("daily end")
 
     }, [])
 
@@ -92,8 +90,18 @@ function Daily() {
         }
     }
 
-    const onSortEnd = (oldIndex, newIndex)=> {
+    const onSortEnd = async (oldIndex, newIndex)=> {
+        notes[oldIndex].orderId = newIndex
         setNotes(arrayMoveImmutable(notes, oldIndex, newIndex))
+        console.log(notes.map(i => {
+            return { orderId: i.orderId, id: i._id}
+        }))
+        /*const response = await axiosInstance.post(DAILY_ORDER_URL, notes.map(i => {
+            return { orderId: i.orderId, id: i._id}
+        }))
+        if (!response.data.is_error && response.status === 200) {
+            toast("Reorder success !")
+        }*/
     }
 
 
@@ -106,17 +114,17 @@ function Daily() {
                 <div className='noNotes'>
                     <img className='sadLogo' src={SadSvg} alt=""/>
                     <p>Create a new note to keep your notes organized power of AI</p>
-                    <CreateNote mergeNotes={mergeNotes}/>
+                    <CreateNote mergeNotes={mergeNotes} notes={notes}/>
                 </div>
             ) : (
 
-                <>
-                    <CreateNote mergeNotes={mergeNotes} noteCount={notes.length}/>
+                <div className={"h-screen p-b-60"}>
+                    <CreateNote mergeNotes={mergeNotes} notes={notes}/>
                     <SortableList onSortEnd={onSortEnd} className="list" draggedItemClassName="dragged" lockAxis={"y"}>
                         {notes.map((note) => (
                             <SortableItem key={note}>
                                 <li className="list-group-item d-flex justify-content-between align-items-center"
-                                    key={note.id}>
+                                    key={note.id} style={{cursor: "pointer"}}>
                                     <span>{note.content}</span>
                                     <div>
                                         <div style={{display: 'flex'}}>
@@ -132,7 +140,7 @@ function Daily() {
                             </SortableItem>
                         ))}
                     </SortableList>
-                </>
+                </div>
             )}
             {
                 showNoteEditModal && (

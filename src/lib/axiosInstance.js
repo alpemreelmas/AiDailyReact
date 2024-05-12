@@ -1,5 +1,5 @@
 import axios from "axios";
-import {controlTokensOfUser, getCredentials, validateRefreshToken} from "./services/authService.js";
+import {getCredentials, validateRefreshToken} from "./services/authService.js";
 import {AUTH_KEY} from "../constants/appConstants.js";
 
 const axiosInstance = axios.create({
@@ -28,8 +28,9 @@ axiosInstance.interceptors.response.use(function (response) {
            window.localStorage.removeItem(AUTH_KEY)
            window.location= "/login"
        }
+    }else{
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
 });
 
 export default axiosInstance;

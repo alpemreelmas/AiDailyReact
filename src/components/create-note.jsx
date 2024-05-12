@@ -7,13 +7,13 @@ import Alert from "./alert.jsx";
 import PlusSvg from "../../public/plus.svg";
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "./ui/buttonElement.jsx";
+import {toast} from "react-toastify";
 
-function CreateNote({mergeNotes,noteCount}) {
+function CreateNote({mergeNotes,notes}) {
 
     const [showNoteCreateModal, setNoteCreateModal] = useState(false);
     const [noteCreateInputValue, setNoteCreateInputValue] = useState('');
     const [errors, setErrors] = useState();
-    const [success, setSuccess] = useState();
 
     const toggleNoteCreateModal = () => {
         setNoteCreateModal(!showNoteCreateModal)
@@ -25,10 +25,10 @@ function CreateNote({mergeNotes,noteCount}) {
         setErrors(null)
             try {
                 const validated= await createNoteSchema.parseAsync({content: noteCreateInputValue})
-                const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content})
+                const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content, orderId: (Math.max.apply(null, notes.map(function (o) { return o.orderId; })) + 1) })
                 console.log(response.data)
                 if(!response.data.is_error && response.status === 201){
-                    setSuccess("Note created successfully.")
+                    toast("Note created successfully.")
                     mergeNotes(response.data.data)
                     toggleNoteCreateModal();
                 }
@@ -46,16 +46,7 @@ function CreateNote({mergeNotes,noteCount}) {
 
     return (
         <div>
-            {success?.length > 0 && (
-            <>
-                
-                <Alert messages={success} type={"success"} />
-            </>
-
-            )}
-
-
-            {noteCount > 0 ? (
+            {notes.length > 0 ? (
                 <button
                     onClick={toggleNoteCreateModal}
                     style={{ marginBottom: 15 }}
@@ -107,7 +98,7 @@ function CreateNote({mergeNotes,noteCount}) {
                                     </div>
                                 </form>
                                 <div className="align-right">
-                                    <Button kind='default' content='cancel' onClick={toggleNoteCreateModal} />
+                                    <Button kind='default' className={"mr-2"} content='cancel' onClick={toggleNoteCreateModal} />
                                     <Button kind='success' content='Create Note' onClick={handleCreateNote} style={{marginLeft: 10}} />
                                 </div>
                             </div>

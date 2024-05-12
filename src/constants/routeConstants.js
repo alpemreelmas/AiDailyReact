@@ -6,4 +6,5 @@ export const REGISTER_URL = AUTH_URL_PREFIX+"/refresh-token"
 const DAILY_PREFIX = "/daily"
 
 export const DAILY_CREATE_URL = DAILY_PREFIX + "/"
+export const DAILY_ORDER_URL = DAILY_PREFIX + "/order"
 export const DAILY_LIST_URL = DAILY_PREFIX + "/"

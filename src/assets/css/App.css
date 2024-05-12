@@ -2040,7 +2040,7 @@ html.fullscreen-bg #wrapper {
   transition: all 0.3s ease-in-out;
   width: calc(100% - 240px);
   float: right;
-  position: relative;
+  /*position: relative;*/
   margin-top: 62px;
   padding: 0 10px;
 }
@@ -11435,11 +11435,15 @@ hr {
 }
 
 .createNoteBtnB0 {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
   border: 2px solid #28a745;
   transition: 100ms all;
+  position: fixed;
+  bottom: 30px;
+  right: 50px;
+  z-index: 9;
 }
 
 .createNoteBtnB0:focus {
@@ -11447,7 +11451,7 @@ hr {
 }
 
 .createNoteBtnB0 img {
-  width: 20px;
+  width: 25px;
 }
 
 .createNoteBtnB0:hover img {
@@ -11495,7 +11499,7 @@ hr {
 }
 
 .openSidebarButton {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 8;
@@ -11540,6 +11544,11 @@ hr {
     margin-bottom: 4px;
     padding-left: 10px;
     border-left: #a5a8ad 1px solid;
+  }
+
+  .createNoteBtnB0{
+    right: 20px;
+    bottom: 20px;
   }
 }
 
