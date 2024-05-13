@@ -21,6 +21,10 @@ export function ProfileDropdown() {
     const [name, setName] = useState('');
 
 
+    const toastOption = {
+        theme: "dark"
+    }
+
 
     const toggleModal = () => {
         setShowModal(!showModal)
@@ -76,7 +80,7 @@ export function ProfileDropdown() {
             const validated = await updateProfileSchema.parseAsync({name,password})
             const response = await axiosInstance.post("/auth/profile", validated)
             if (!response.data.is_error && response.status == 200){
-                toast('Informations updated successfully');
+                toast.success('Informations updated successfully', toastOption);
                 toggleModal();
                 toggleProfileDropdown();
             }
@@ -99,7 +103,7 @@ export function ProfileDropdown() {
             const userData = JSON.parse(window.localStorage.getItem(AUTH_KEY));
             const response = await axiosInstance.post("/auth/profile", {email: userData.email})
             if (!response.data.is_error && response.status == 200){
-                toast('Verification email successfully sended');
+                toast.success('Verification email successfully sended', toastOption);
             }
 
         }catch (error) {

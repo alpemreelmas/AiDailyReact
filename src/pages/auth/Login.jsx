@@ -8,6 +8,7 @@ import {useAuth} from "../../hooks/useAuth.jsx";
 import {LOGIN_URL} from "../../constants/routeConstants.js";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
+import { toast } from "react-toastify";
 
 
 function Login() {
@@ -15,6 +16,9 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState();
+  const toastOption = {
+    theme: "dark"
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +36,7 @@ function Login() {
         setErrors(messages)
       }
       if(e.response?.data.is_error){
-        toast(e.response.data.message)
+        toast.error(e.response.data.message, toastOption)
       }
     }
 

@@ -1,17 +1,18 @@
 import Header from "./Header.jsx";
 import Sidebar from "./Sidebar.jsx";
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function Layout() {
+
     return (
         <div id="wrapper">
-            <Header/>
-            <Sidebar/>
+            <Header />
+            <Sidebar />
             <div id='main-content'>
-                <Outlet/>
+                <Outlet />
             </div>
         </div>
-    )
+    );
 }
 
-export default Layout
+export default Layout;

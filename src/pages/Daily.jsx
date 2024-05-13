@@ -9,15 +9,24 @@ import SadSvg from "../../public/sad.svg";
 import SortableList, {SortableItem} from "react-easy-sort";
 import {arrayMoveImmutable} from "array-move";
 import {toast} from "react-toastify";
+import { useLoading } from '../lib/loadingContext.jsx';
+import Loading from '../components/layout/Loading.jsx';
 
 function Daily() {
     const [showNoteEditModal, setNoteEditModal] = useState(false);
     const [editNote, setEditNote] = useState();
     const [notes, setNotes] = useState([]);
     const [errors, setErrors] = useState();
+    const toastOption = {
+        theme: "dark"
+    }
+
+    const { loading, setLoading } = useLoading();
 
     useEffect(() => {
+        
         const fetchData = async () => {
+            setLoading(true);
             setErrors(null)
             try {
                 const response = await axiosInstance.get(DAILY_LIST_URL)
@@ -29,11 +38,16 @@ function Daily() {
                     setErrors(e.response.data.message)
                 }
             }
+            setLoading(false);
         }
 
         fetchData()
-
     }, [])
+
+
+
+
+
 
     const mergeNotes = (data) => {
         setNotes([...notes, data])
@@ -45,7 +59,7 @@ function Daily() {
             /*TODO: fix naming of url*/
             const response = await axiosInstance.delete(`${DAILY_LIST_URL}${noteId}`)
             if (!response.data.is_error && response.status === 200) {
-                toast("Removed successfully");
+                toast.success("Removed successfully", toastOption);
                 setNotes(notes.filter((note) => note._id !== noteId))
             }
         } catch (e) {
@@ -85,7 +99,7 @@ function Daily() {
                 setErrors(messages)
             }
             if (e.response?.data.is_error) {
-                toast(e.response.data.message)
+                toast.error(e.response.data.message, toastOption)
             }
         }
     }
@@ -104,9 +118,14 @@ function Daily() {
         }*/
     }
 
+    if(loading(true)){
+        return <Loading />
+    }
 
     return (
         <div style={{margin: "15px 15px 50px"}}>
+            
+            
             {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
 
             {notes.length === 0 ? (

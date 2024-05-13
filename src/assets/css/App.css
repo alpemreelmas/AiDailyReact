@@ -11521,6 +11521,11 @@ hr {
     outline: none !important;
 }
 
+.auth-main {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
 @media screen and (max-width: 1536px) {
   .noNotes {
     margin-top: 200px;

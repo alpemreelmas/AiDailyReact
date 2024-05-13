@@ -15,6 +15,11 @@ function CreateNote({mergeNotes,notes}) {
     const [noteCreateInputValue, setNoteCreateInputValue] = useState('');
     const [errors, setErrors] = useState();
 
+    const toastOption = {
+        theme: "dark"
+    }
+
+
     const toggleNoteCreateModal = () => {
         setNoteCreateModal(!showNoteCreateModal)
         setErrors(null)
@@ -28,7 +33,7 @@ function CreateNote({mergeNotes,notes}) {
                 const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content, orderId: (Math.max.apply(null, notes.map(function (o) { return o.orderId; })) + 1) })
                 console.log(response.data)
                 if(!response.data.is_error && response.status === 201){
-                    toast("Note created successfully.")
+                    toast.success("Note created successfully.", toastOption)
                     mergeNotes(response.data.data)
                     toggleNoteCreateModal();
                 }

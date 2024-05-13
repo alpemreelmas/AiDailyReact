@@ -16,6 +16,24 @@
     <link rel="stylesheet" href="/vendor/toastr/toastr.min.css">
   </head>
   <body>
+    <style>
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #000000; 
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+        margin-top: 20%;
+      }
+  
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <div id="loading-spinner" class="loader"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
@@ -28,6 +46,12 @@
 
     <script src="/bundles/libscripts.bundle.js"></script>
     <script src="/bundles/vendorscripts.bundle.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("loading-spinner").style.display = "none";
+      });
+    </script>
 
   </body>
 </html>

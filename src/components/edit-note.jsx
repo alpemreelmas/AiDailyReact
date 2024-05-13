@@ -5,12 +5,17 @@ import {ZodError} from "zod";
 import {createNoteSchema} from "../schemas/createNoteSchema.js";
 import Alert from "./alert.jsx";
 import Button from "./ui/buttonElement.jsx";
+import { toast } from 'react-toastify';
 
 function EditNote({editNote,note}) {
 
     const [showNoteCreateModal, setNoteCreateModal] = useState(false);
     const [localNote, setLocalNote] = useState(note);
     const [errors, setErrors] = useState();
+
+    const toastOption = {
+        theme: "dark"
+    }
 
     const toggleNoteCreateModal = () => {
         setNoteCreateModal(!showNoteCreateModal)
@@ -26,6 +31,7 @@ function EditNote({editNote,note}) {
                     setLocalNote();
                     toggleNoteCreateModal();
                     editNote(note._id,response.data.data)
+                    toast.success('Note edited successfully!', toastOption)
                 }
             }catch (e) {
                 if(e instanceof ZodError){
@@ -34,7 +40,7 @@ function EditNote({editNote,note}) {
                     setErrors(messages)
                 }
                 if(e.response?.data.is_error){
-                    setErrors(e.response.data.message)
+                    toast.error(e.response.data.message, toastOption)
                 }
             }
     }

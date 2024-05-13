@@ -15,6 +15,10 @@ function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [errors, setErrors] = useState();
 
+  const toastOption = {
+    theme: "dark"
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors(null)
@@ -23,7 +27,7 @@ function ForgotPassword() {
       const response = await axiosInstance.post('/reset-password',validated)
       
       if(!response.data.is_error && response.status === 200){
-        toast(response.data.data)
+        toast.success(response.data.data, toastOption)
       }
     }catch (e) {
       if(e instanceof ZodError){
@@ -32,7 +36,7 @@ function ForgotPassword() {
         setErrors(messages)
       }
       if(e.response?.data.is_error){
-        toast(e.response.data.message)
+        toast.error(e.response.data.message, toastOption)
       }
     }
 
