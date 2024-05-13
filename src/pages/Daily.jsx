@@ -9,7 +9,7 @@ import SadSvg from "../../public/sad.svg";
 import SortableList, {SortableItem} from "react-easy-sort";
 import {arrayMoveImmutable} from "array-move";
 import {toast} from "react-toastify";
-import { useLoading } from '../lib/loadingContext.jsx';
+import { useLoading } from '../hooks/loadingContext.jsx';
 import Loading from '../components/layout/Loading.jsx';
 
 function Daily() {
@@ -43,11 +43,6 @@ function Daily() {
 
         fetchData()
     }, [])
-
-
-
-
-
 
     const mergeNotes = (data) => {
         setNotes([...notes, data])
@@ -110,15 +105,15 @@ function Daily() {
         console.log(notes.map(i => {
             return { orderId: i.orderId, id: i._id}
         }))
-        /*const response = await axiosInstance.post(DAILY_ORDER_URL, notes.map(i => {
+        const response = await axiosInstance.post(DAILY_ORDER_URL, notes.map(i => {
             return { orderId: i.orderId, id: i._id}
         }))
         if (!response.data.is_error && response.status === 200) {
             toast("Reorder success !")
-        }*/
+        }
     }
 
-    if(loading(true)){
+    if(loading){
         return <Loading />
     }
 

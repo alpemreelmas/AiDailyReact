@@ -5,7 +5,7 @@ import {router} from "./routes.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
-import { LoadingProvider } from './lib/loadingContext.jsx';
+import { LoadingProvider } from './hooks/loadingContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

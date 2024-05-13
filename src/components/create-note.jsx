@@ -30,7 +30,7 @@ function CreateNote({mergeNotes,notes}) {
         setErrors(null)
             try {
                 const validated= await createNoteSchema.parseAsync({content: noteCreateInputValue})
-                const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content, orderId: (Math.max.apply(null, notes.map(function (o) { return o.orderId; })) + 1) })
+                const response = await axiosInstance.post(DAILY_CREATE_URL,{content:validated.content, orderId: notes.length === 0 ? 0 : (Math.max.apply(null, notes.map(function (o) { return o.orderId; })) + 1) })
                 console.log(response.data)
                 if(!response.data.is_error && response.status === 201){
                     toast.success("Note created successfully.", toastOption)
