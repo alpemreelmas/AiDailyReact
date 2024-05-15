@@ -1,5 +1,5 @@
 import { useState} from 'react';
-import { Navigate } from 'react-router-dom';
+import {redirect, useNavigate, useSearchParams} from 'react-router-dom';
 import axiosInstance from "../../lib/axiosInstance.js";
 import {ZodError} from "zod";
 import Alert from "../../components/alert.jsx";
@@ -13,8 +13,9 @@ import { resetPasswordSchema } from '../../schemas/resetPasswordSchema.js';
 function ResetPassword() {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [errors, setErrors] = useState();
-  const token = new URLSearchParams(window.location.search).get('token');
+  let [searchParams, setSearchParams] = useSearchParams();
   
   const toastOption = {
     theme: "dark"
@@ -23,14 +24,19 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!searchParams.has("token")){
+      redirect("/forgot-password");
+    }
     setErrors(null)
     try {
-      const validated= await resetPasswordSchema.parseAsync({email, newPassword, token})
-      const response = await axiosInstance.post('/reset-password/reset',validated)
+      const validated= await resetPasswordSchema.parseAsync({email, newPassword, confirmNewPassword})
+      const response = await axiosInstance.post(`/reset-password/reset?token=${searchParams.get("token")}`,validated)
+      console.log(response)
       if(!response.data.is_error && response.status === 200){
         console.log('password successfully changed')
       }
     }catch (e) {
+      console.log(e.response)
       if(e instanceof ZodError){
         var messages = [];
         e.errors.map(obj => messages.push(obj.message))
@@ -42,9 +48,6 @@ function ResetPassword() {
     }
 
   };
-
-
-
 
   return (
     <div className="auth-main particles_js">
@@ -66,7 +69,10 @@ function ResetPassword() {
               <div className="form-group">
                 <InputWithLabel type='password' label='New Password' id='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder='New Password' />
               </div>
-              <input type="hidden" name="token" value={token} />
+              <div className="form-group">
+                <InputWithLabel type='password' label='Confirmation New Password' id='conf_password' value={confirmNewPassword}
+                                onChange={(e) => setConfirmNewPassword(e.target.value)} placeholder='Confirmation New Password' />
+              </div>
               <Button type='submit' kind='primary btn-round btn-block' content='Send' />
             </form>
           </div>

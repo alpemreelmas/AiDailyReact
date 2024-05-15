@@ -62,9 +62,6 @@ function Login() {
               <div className="form-group">
                 <InputWithLabel type='password' label='Password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
               </div>
-              <div className='forgotPassword' style={{textAlign: 'left'}}>
-                <span><Link to="/forgot-password">I forgot my password</Link></span>
-              </div>
               
               <Button type='submit' kind='primary btn-round btn-block' content='Login' />
 
@@ -72,6 +69,9 @@ function Login() {
                 <span>
                   Don't have an account? <Link to="/register">Register</Link>
                 </span>
+                <div className='forgotPassword' style={{textAlign: 'center'}}>
+                  <span>Did you forget your password ? <Link to="/forgot-password">Reset Now</Link></span>
+                </div>
               </div>
             </form>
           </div>
