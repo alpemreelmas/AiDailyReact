@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from 'react-router-dom';
 import Settings from '../settings.jsx';
+import { Link } from 'react-router-dom';
 
 function Header() {
 
@@ -56,7 +57,9 @@ function Header() {
                         </a>
                     </li>
                     <li>
-                        <Settings />
+                    <Link to="/settings" className="icon-menu settings-button">
+                        <i className="icon-settings"/>
+                    </Link>
                     </li>
                     </ul>
                 </div>

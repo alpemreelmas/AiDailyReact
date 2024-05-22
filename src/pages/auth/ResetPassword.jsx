@@ -16,6 +16,8 @@ function ResetPassword() {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [errors, setErrors] = useState();
   let [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
   
   const toastOption = {
     theme: "dark"
@@ -33,7 +35,8 @@ function ResetPassword() {
       const response = await axiosInstance.post(`/reset-password/reset?token=${searchParams.get("token")}`,validated)
       console.log(response)
       if(!response.data.is_error && response.status === 200){
-        console.log('password successfully changed')
+        toast.success('Your password successfully changed', toastOption);
+        navigate('/login')
       }
     }catch (e) {
       console.log(e.response)

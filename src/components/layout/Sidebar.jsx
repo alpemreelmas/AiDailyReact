@@ -1,15 +1,30 @@
 import { Link } from 'react-router-dom';
-import ProfileDropdown from '../profileDropdown.jsx';
 import ChevronLeft from "../../../public/chevron-left.svg";
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import axiosInstance from "../../lib/axiosInstance.js";
 
 function Sidebar() {
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [user, setUser] = useState(null)
+    const [name, setName] = useState('');
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen)
     }
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const respone = await axiosInstance.get('/auth/profile');
+                setUser(respone.data);
+            }catch(error){
+                console.log(error)
+            }
+        }
+
+        fetchUserData();
+    }, []);
     return (
         <>
             <div className='navbar-btn'>
@@ -46,7 +61,9 @@ function Sidebar() {
                     <div className="dropdown">
 
                         <span>Welcome,</span>
-                        <ProfileDropdown/>
+                        <div>
+            <strong>{user ? user.data.name : "User not found"}</strong>
+        </div>
 
                     </div>
                     </div>
@@ -66,11 +83,11 @@ function Sidebar() {
                                 <i className="icon-plus" />
                                 <span>New</span>
                             </a>
-                        <ul>
-                            <li className="{{ Request::segment(2) === 'index' ? 'active' : null }}">
-                            <a href="{{route('mypage.index')}}">04.04.2024</a>
-                            </li>
-                        </ul>*/}
+                            <ul>
+                                <li className="{{ Request::segment(2) === 'index' ? 'active' : null }}">
+                                <a href="{{route('mypage.index')}}">04.04.2024</a>
+                                </li>
+                            </ul>*/}
                         </li>
                     </ul>
                     </nav>

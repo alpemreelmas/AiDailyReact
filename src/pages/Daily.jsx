@@ -17,6 +17,8 @@ function Daily() {
     const [editNote, setEditNote] = useState();
     const [notes, setNotes] = useState([]);
     const [errors, setErrors] = useState();
+    const [showFullNote, setShowFullNote] = useState(null);
+
     const toastOption = {
         theme: "dark"
     }
@@ -113,6 +115,17 @@ function Daily() {
         }
     }
 
+    const handleShowFullNote = (note) => {
+        setShowFullNote(note);
+    };
+
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    };
+
     if(loading){
         return <Loading />
     }
@@ -138,8 +151,12 @@ function Daily() {
                         {notes.map((note) => (
                             <SortableItem key={note}>
                                 <li className="list-group-item d-flex justify-content-between align-items-center"
-                                    key={note.id} style={{cursor: "pointer"}}>
-                                    <span>{note.content}</span>
+                                    key={note._id} style={{ cursor: 'pointer' }} onClick={(e) => {
+                                        if (!e.target.closest('.btn')) {
+                                            handleShowFullNote(note);
+                                        }
+                                    }}>
+                                    <span>{truncateText(note.content, 50)}</span>
                                     <div>
                                         <div style={{display: 'flex'}}>
                                             <button className="btn btn-info btn-sm" onClick={toggleNoteEditModal}
@@ -156,54 +173,77 @@ function Daily() {
                     </SortableList>
                 </div>
             )}
-            {
-                showNoteEditModal && (
-                    <div
-                        className="modal fade default-modal show"
-                        tabIndex={-1}
-                        role="dialog"
-                        aria-labelledby="exampleModalCenterTitle"
-                        style={{display: "block"}}
-                        aria-modal="true"
-                    >
-                        <div className="modal-dialog modal-dialog-centered" role="document">
-                            <div className="modal-content">
-                                <div className="modal-body">
-                                    <div className="d-flex mb-3">
-                                        <div>
-                                            <h6 className="mb-0">Edit Note</h6>
-                                        </div>
+            {showNoteEditModal && (
+                <div
+                    className="modal fade default-modal show"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-labelledby="exampleModalCenterTitle"
+                    style={{display: "block"}}
+                    aria-modal="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-body">
+                                <div className="d-flex mb-3">
+                                    <div>
+                                        <h6 className="mb-0">Edit Note</h6>
                                     </div>
-                                    {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
-                                    <form className="form-auth-small m-t-20">
-                                        <div className="form-group">
-                                            <label htmlFor="signin-email" className="control-label sr-only">
-                                                Note
-                                            </label>
-                                            <textarea
-                                                placeholder='Type Your Note'
-                                                className="form-control p-2 text-white"
-                                                rows={10}
-                                                onChange={(e) => setEditNote({...editNote, content: e.target.value})}
-                                            >
-                                                {editNote.content}
-                                            </textarea>
-                                        </div>
-                                    </form>
-                                    <div className="align-right">
-                                        <button onClick={toggleNoteEditModal} className="btn btn-default">
-                                            Cancel
-                                        </button>
-                                        <button onClick={handleEdit} className="btn btn-success"
-                                                style={{marginLeft: 10}}>
-                                            Update Note
-                                        </button>
+                                </div>
+                                {errors?.length > 0 && (<Alert messages={errors} type={"warning"}/>)}
+                                <form className="form-auth-small m-t-20">
+                                    <div className="form-group">
+                                        <label htmlFor="signin-email" className="control-label sr-only">
+                                            Note
+                                        </label>
+                                        <textarea
+                                            placeholder='Type Your Note'
+                                            className="form-control p-2 text-white"
+                                            rows={10}
+                                            onChange={(e) => setEditNote({...editNote, content: e.target.value})}
+                                        >
+                                            {editNote.content}
+                                        </textarea>
                                     </div>
+                                </form>
+                                <div className="align-right">
+                                    <button onClick={toggleNoteEditModal} className="btn btn-default">
+                                        Cancel
+                                    </button>
+                                    <button onClick={handleEdit} className="btn btn-success"
+                                            style={{marginLeft: 10}}>
+                                        Update Note
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
+            )}
+
+            {showFullNote && (
+                <div
+                    className="modal fade default-modal show"
+                    tabIndex={-1}
+                    role="dialog"
+                    style={{ display: "block" }}
+                    aria-modal="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Note Details</h5>
+                                <button type="button" className="close" onClick={() => setShowFullNote(null)}>
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>{showFullNote.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
     );
