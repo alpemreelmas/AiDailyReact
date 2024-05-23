@@ -1,16 +1,8 @@
-import { useState} from 'react';
 import { Link } from 'react-router-dom';
-import axiosInstance from "../../lib/axiosInstance.js";
-import {ZodError} from "zod";
-import {loginSchema} from "../../schemas/loginSchema.js";
 import Alert from "../../components/alert.jsx";
-import {useAuth} from "../../hooks/useAuth.jsx";
-import {LOGIN_URL} from "../../constants/routeConstants.js";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
-import { toast } from "react-toastify";
-import loginApi from "../../hooks/auth/login.js";
-import useLogin from "../../hooks/auth/login.js";
+import useLogin from "../../hooks/auth/useLogin.js";
 
 
 function Login() {

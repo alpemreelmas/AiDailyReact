@@ -1,7 +1,7 @@
 import {AUTH_KEY} from "../../constants/appConstants.js";
 import {jwtDecode} from "jwt-decode";
 import axiosInstance from "../axiosInstance.js";
-import {REFRESH_TOKEN_URL} from "../../constants/routeConstants.js";
+import {REFRESH_TOKEN_URL, RESET_PASSWORD_URL} from "../../constants/routeConstants.js";
 
 export async function controlTokensOfUser() {
     try {
@@ -36,15 +36,16 @@ export async function validateRefreshToken(){
         if(!auth) throw new Error("No auth 1")
         const authDecoded = JSON.parse(auth)
         const refreshToken = jwtDecode(authDecoded.refresh_token)
-        console.log("after refresh")
         if (Date.now().valueOf() < new Date(refreshToken.exp * 1000).valueOf()) {
-            console.log("inside if")
             const response = await axiosInstance.post(REFRESH_TOKEN_URL, {refreshToken: authDecoded.refresh_token})
-            console.log("after axios")
             if (!response.data.is_error) {
                 return await saveCredentials(response.data.data)
             }
         }
         throw new Error("expired of refresh")
 
+}
+
+export function generateResetPasswordUrl (token){
+    return `${RESET_PASSWORD_URL}${token}`
 }

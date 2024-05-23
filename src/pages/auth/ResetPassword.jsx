@@ -1,56 +1,22 @@
-import { useState} from 'react';
-import {redirect, useNavigate, useSearchParams} from 'react-router-dom';
-import axiosInstance from "../../lib/axiosInstance.js";
-import {ZodError} from "zod";
 import Alert from "../../components/alert.jsx";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
-import { toast } from 'react-toastify';
-import { resetPasswordSchema } from '../../schemas/resetPasswordSchema.js';
+import useResetPassword from "../../hooks/auth/useResetPassword.js";
 
 
 
 function ResetPassword() {
-  const [email, setEmail] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [errors, setErrors] = useState();
-  let [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate();
-  
-  const toastOption = {
-    theme: "dark"
-  }
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if(!searchParams.has("token")){
-      redirect("/forgot-password");
-    }
-    setErrors(null)
-    try {
-      const validated= await resetPasswordSchema.parseAsync({email, newPassword, confirmNewPassword})
-      const response = await axiosInstance.post(`/reset-password/reset?token=${searchParams.get("token")}`,validated)
-      console.log(response)
-      if(!response.data.is_error && response.status === 200){
-        toast.success('Your password successfully changed', toastOption);
-        navigate('/login')
-      }
-    }catch (e) {
-      console.log(e.response)
-      if(e instanceof ZodError){
-        var messages = [];
-        e.errors.map(obj => messages.push(obj.message))
-        setErrors(messages)
-      }
-      if(e.response?.data.is_error){
-        toast.error(e.response.data.message, toastOption)
-      }
-    }
-
-  };
+  const {
+    email,
+    setEmail,
+    newPassword,
+    setNewPassword,
+    confirmNewPassword,
+    setConfirmNewPassword,
+    handleResetPasswordSubmit,
+    errors
+  } = useResetPassword()
 
   return (
     <div className="auth-main particles_js">
@@ -64,7 +30,7 @@ function ResetPassword() {
           <div className="body">
             <p className="lead">Change your password</p>
 
-            <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
+            <form className="form-auth-small m-t-20" onSubmit={handleResetPasswordSubmit}>
               {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
               <div className="form-group">
                 <InputWithLabel type='email' label='Email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />

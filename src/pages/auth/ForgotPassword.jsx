@@ -1,45 +1,14 @@
-import { useState} from 'react';
-import { Link } from 'react-router-dom';
-import axiosInstance from "../../lib/axiosInstance.js";
-import {ZodError} from "zod";
 import Alert from "../../components/alert.jsx";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
-import { forgotPasswordSchema } from '../../schemas/forgotPasswordSchema.js';
-import { toast } from 'react-toastify';
 import BackButton from '../../components/ui/backButton.jsx';
+import useForgotPassword from "../../hooks/auth/useForgotPassword.js";
 
 
 
 function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [errors, setErrors] = useState();
 
-  const toastOption = {
-    theme: "dark"
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors(null)
-    try {
-      const validated= await forgotPasswordSchema.parseAsync({email})
-      const response = await axiosInstance.post('/reset-password',validated)
-      if(!response.data.is_error && response.status === 201){
-        toast.success('The password reset link has been successfully sent to your email', toastOption)
-      }
-    }catch (e) {
-      if(e instanceof ZodError){
-        var messages = [];
-        e.errors.map(obj => messages.push(obj.message))
-        setErrors(messages)
-      }
-      if(e.response?.data.is_error){
-        toast.error(e.response.data.message, toastOption)
-      }
-    }
-
-  };
+  const { email, setEmail, errors, handleForgotPasswordSubmit } = useForgotPassword()
 
   return (
     <div className="auth-main particles_js">
@@ -54,7 +23,7 @@ function ForgotPassword() {
             <BackButton />
             <p className="lead" style={{marginTop: 30}}>Send reset password email</p>
 
-            <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
+            <form className="form-auth-small m-t-20" onSubmit={handleForgotPasswordSubmit}>
               {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
               <div className="form-group">
                 <InputWithLabel type='email' label='Email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />

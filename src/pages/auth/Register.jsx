@@ -1,42 +1,23 @@
-import React, { useState } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {loginSchema} from "../../schemas/loginSchema.js";
-import axiosInstance from "../../lib/axiosInstance.js";
-import {ZodError} from "zod";
+import {Link } from 'react-router-dom';
 import Alert from "../../components/alert.jsx";
-import {registerSchema} from "../../schemas/registerSchema.js";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
+import useRegister from "../../hooks/auth/useRegister.js";
 
 function Register() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [verifyPassword, setVerifyPassword] = useState('');
-  const [errors, setErrors] = useState();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors(null)
-    try {
-      const validated= await registerSchema.parseAsync({email,password,name,passwordConfirmation: verifyPassword})
-      const response = await axiosInstance.post("/auth/register",validated)
-      if(!response.data.is_error && response.status == 201){
-        console.log(response.data)
-        /*navigate('/notes');*/
-      }
-    }catch (e) {
-      if(e instanceof ZodError){
-        var messages = [];
-        e.errors.map(obj => messages.push(obj.message))
-        setErrors(messages)
-      }
-      if(e.response.data.is_error){
-        setErrors(Array.isArray(e.response.data.message) ? e.response.data.message : [e.response.data.message])
-      }
-    }
-
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    verifyPassword,
+    setVerifyPassword,
+    name,
+    setName,
+    errors,
+    handleRegisterSubmit
+  } = useRegister();
 
   return (
     <div className="auth-main particles_js">
@@ -49,7 +30,7 @@ function Register() {
             <p className="lead">Create an account</p>
 
             {errors?.length > 0 && (<Alert messages={errors} type={"warning"} />)}
-            <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
+            <form className="form-auth-small m-t-20" onSubmit={handleRegisterSubmit}>
               <div className="form-group">
                 <InputWithLabel type='text' label='Your name' id='name' value={name} onChange={(e) => setName(e.target.value)} placeholder='Your Name' />
               </div>
