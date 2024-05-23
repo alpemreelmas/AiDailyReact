@@ -9,38 +9,18 @@ import {LOGIN_URL} from "../../constants/routeConstants.js";
 import Button from "../../components/ui/buttonElement.jsx";
 import InputWithLabel from "../../components/ui/inputWithLabel.jsx";
 import { toast } from "react-toastify";
+import loginApi from "../../hooks/auth/login.js";
+import useLogin from "../../hooks/auth/login.js";
 
 
 function Login() {
-  const { login } = useAuth()
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState();
-  const toastOption = {
-    theme: "dark"
-  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrors(null)
-    try {
-      const validated= await loginSchema.parseAsync({email,password})
-      const response = await axiosInstance.post(LOGIN_URL,validated)
-      if(!response.data.is_error && response.status === 200){
-        login(response.data.data)
-      }
-    }catch (e) {
-      if(e instanceof ZodError){
-        var messages = [];
-        e.errors.map(obj => messages.push(obj.message))
-        setErrors(messages)
-      }
-      if(e.response?.data.is_error){
-        toast.error(e.response.data.message, toastOption)
-      }
-    }
-
-  };
+  const {errors,
+    handleLoginSubmit,
+    email,
+    setEmail,
+    password,
+    setPassword } = useLogin();
 
   return (
     <div className="auth-main particles_js">
@@ -54,7 +34,7 @@ function Login() {
           <div className="body">
             <p className="lead">Login to your account</p>
 
-            <form className="form-auth-small m-t-20" onSubmit={handleSubmit}>
+            <form className="form-auth-small m-t-20" onSubmit={handleLoginSubmit}>
               {errors?.length > 0 && (<Alert messages={errors} type={"danger"} />)}
               <div className="form-group">
                 <InputWithLabel type='email' label='Email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
