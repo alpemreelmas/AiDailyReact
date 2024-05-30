@@ -75,10 +75,13 @@ function Sidebar() {
                                 <i className="icon-home" />
                                 <span>My Notes</span>
                             </Link>
+                            {/*
                             <Link to="/" className="has-arrow">
                                 <i className="icon-home" />
                                 <span>Ai Reports</span>
                             </Link>
+                            */}
+
                             {/*<a href="/new-daily.html" className="has-arrow">
                                 <i className="icon-plus" />
                                 <span>New</span>

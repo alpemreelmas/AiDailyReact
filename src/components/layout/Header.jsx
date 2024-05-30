@@ -42,6 +42,8 @@ function Header() {
                 <div className="navbar-right">
                 <div id="navbar-menu">
                     <ul className="nav navbar-nav">
+
+                    {/*
                     <li>
                         <a
                         href="javascript:void(0);"
@@ -56,6 +58,8 @@ function Header() {
                         <i className="icon-power" />
                         </a>
                     </li>
+                    */}
+
                     <li>
                     <Link to="/settings" className="icon-menu settings-button">
                         <i className="icon-settings"/>

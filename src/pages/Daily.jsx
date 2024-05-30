@@ -104,14 +104,11 @@ function Daily() {
     const onSortEnd = async (oldIndex, newIndex)=> {
         notes[oldIndex].orderId = newIndex
         setNotes(arrayMoveImmutable(notes, oldIndex, newIndex))
-        console.log(notes.map(i => {
-            return { orderId: i.orderId, id: i._id}
-        }))
         const response = await axiosInstance.post(DAILY_ORDER_URL, notes.map(i => {
             return { orderId: i.orderId, id: i._id}
         }))
         if (!response.data.is_error && response.status === 200) {
-            toast("Reorder success !")
+            toast.success("Reorder success !", toastOption)
         }
     }
 
