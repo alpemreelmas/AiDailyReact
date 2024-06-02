@@ -24,6 +24,16 @@ function Sidebar() {
         }
 
         fetchUserData();
+
+        const handleUserUpdated = (event) => {
+            setUser(event.detail.user);
+        };
+
+        window.addEventListener('userUpdated', handleUserUpdated);
+
+        return () => {
+            window.removeEventListener('userUpdated', handleUserUpdated);
+        };
     }, []);
     return (
         <>
