@@ -40,6 +40,8 @@ function Settings() {
             const response = await axiosInstance.post('/auth/profile', validated);
             if (!response.data.is_error && response.status === 200) {
                 toast.success('Informations updated successfully', toastOption);
+                const updateEvent = new CustomEvent('userUpdated', { detail: { user: response.data } });
+                window.dispatchEvent(updateEvent);
             }
         } catch (e) {
             if (e instanceof ZodError) {
