@@ -21,8 +21,8 @@ function Register() {
     try {
       const validated= await registerSchema.parseAsync({email,password,name,passwordConfirmation: verifyPassword})
       const response = await axiosInstance.post("/auth/register",validated)
-      console.log(response.status)
-      if(!response.data.is_error && response.status == 201){
+      if(!response.data.is_error && response.status == 200){
+        console.log('Successfully')
         navigate('/notes');
       }
     }catch (e) {
