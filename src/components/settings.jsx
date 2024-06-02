@@ -61,7 +61,7 @@ function Settings() {
         try {
             const userData = JSON.parse(window.localStorage.getItem(AUTH_KEY));
             const response = await axiosInstance.post('/auth/resend-verification', { email: userData.email });
-            if (!response.data.is_error && response.status === 200) {
+            if (!response.data.is_error && response.status === 201) {
                 toast.success('Verification email successfully sent', toastOption);
                 
             }
