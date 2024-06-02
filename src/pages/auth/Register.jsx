@@ -15,6 +15,8 @@ function Register() {
   const [verifyPassword, setVerifyPassword] = useState('');
   const [errors, setErrors] = useState();
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors(null)
@@ -22,8 +24,7 @@ function Register() {
       const validated= await registerSchema.parseAsync({email,password,name,passwordConfirmation: verifyPassword})
       const response = await axiosInstance.post("/auth/register",validated)
       if(!response.data.is_error && response.status == 200){
-        console.log('Successfully')
-        navigate('/login');
+        navigate('/daily');
       }
     }catch (e) {
       if(e instanceof ZodError){
