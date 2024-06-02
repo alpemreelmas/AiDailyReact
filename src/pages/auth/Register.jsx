@@ -23,7 +23,7 @@ function Register() {
       const response = await axiosInstance.post("/auth/register",validated)
       if(!response.data.is_error && response.status == 200){
         console.log('Successfully')
-        navigate('/notes');
+        navigate('/login');
       }
     }catch (e) {
       if(e instanceof ZodError){
