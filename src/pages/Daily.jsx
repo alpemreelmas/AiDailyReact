@@ -102,9 +102,13 @@ function Daily() {
     }
 
     const onSortEnd = async (oldIndex, newIndex)=> {
-        notes[oldIndex].orderId = newIndex
-        setNotes(arrayMoveImmutable(notes, oldIndex, newIndex))
-        const response = await axiosInstance.post(DAILY_ORDER_URL, notes.map(i => {
+        /*notes[oldIndex].orderId = newIndex*/
+        let newNotes = arrayMoveImmutable(notes, oldIndex, newIndex)
+        newNotes.map((e, i) => e.orderId = i)
+        newNotes.sort((a,b) => a.orderId-b.orderId) 
+        setNotes(newNotes)
+        console.log(newNotes)
+        const response = await axiosInstance.post(DAILY_ORDER_URL, newNotes.map(i => {
             return { orderId: i.orderId, id: i._id}
         }))
         if (!response.data.is_error && response.status === 200) {
